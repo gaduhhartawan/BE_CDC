@@ -30,7 +30,7 @@ app.use(
 // Route
 app.use("/api/users", userRoute);
 app.use("/api/jobs", jobRoute);
-app.use("/api", authRoute);
+app.use("/api/auth", authRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

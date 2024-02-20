@@ -61,7 +61,7 @@ const updateJob = async (req, res) => {
     if (!job) return res.status(404).json({ message: "Job not found" });
 
     if (job.userId !== req.userId)
-      return next(createError(403, "You can update only your jpb post!"));
+      return next(createError(403, "You can update only your job post!"));
 
     job.companyName = companyName;
     job.jobType = jobType;
