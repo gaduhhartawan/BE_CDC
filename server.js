@@ -18,19 +18,20 @@ app.use(cookieParser());
 // Express Json
 app.use(express.json())
 
+// Cors
+app.use(
+  cors({
+    origin: ["http://localhost:8800"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+
 // Route
 app.use("/api", testRoute);
 app.use("/api", authRoute);
 app.use("/api/user", userRoute);
 
-// Cors
-// app.use(
-//   cors({
-//     origin: ["http://localhost:8800"],
-//     methods: ["GET", "POST", "PUT", "DELETE"],
-//     credentials: true,
-//   })
-// );
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
