@@ -9,7 +9,13 @@ module.exports.Signup = async (req, res, next) => {
     if (existingUser) {
       return res.json({ message: "Email already exists" });
     }
-    const user = await User.create({ email, fullname, password, imgurl });
+    const user = await User.create({
+      ...req.body,
+      email,
+      fullname,
+      password,
+      imgurl,
+    });
     const token = createSecretToken(user._id, user.isCompany);
     res.cookie("token", token, {
       withCredentials: true,
@@ -43,15 +49,13 @@ module.exports.Login = async (req, res, next) => {
       withCredentials: true,
       httpOnly: false,
     });
-    res
-      .status(201)
-      .json({
-        message: "User logged in successfully",
-        success: true,
-        user_name: user.fullname,
-        is_company: user.isCompany,
-        img_url: user.imgUrl,
-      });
+    res.status(201).json({
+      message: "User logged in successfully",
+      success: true,
+      user_name: user.fullname,
+      is_company: user.isCompany,
+      img_url: user.imgUrl,
+    });
     next();
   } catch (error) {
     console.error(error);
