@@ -1,6 +1,18 @@
 const User = require("../models/User");
 require("dotenv").config();
 
+const getUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    if (!users) return res.status(404).json({ message: "No Users Data" });
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+
 const getUser = async (req, res) => {
   const id = req.params.id;
   try {
@@ -62,4 +74,4 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { getUser, updateUser, deleteUser};
+module.exports = { getUsers, getUser, updateUser, deleteUser};
