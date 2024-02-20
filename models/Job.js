@@ -36,7 +36,7 @@ const jobSchema = new mongoose.Schema(
     },
     jobLink: {
       type: String,
-      required: false,
+      required: true,
     },
   },
   {

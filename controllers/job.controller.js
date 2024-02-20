@@ -1,5 +1,4 @@
 const Job = require("../models/Job");
-const getJobsData = require("../utils/scrapJob");
 
 const getJobs = async (req, res) => {
   try {
