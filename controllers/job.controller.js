@@ -1,8 +1,20 @@
 const Job = require("../models/Job");
 
 const getJobs = async (req, res) => {
+  const filters = {
+    ...(req.query.category && {
+      jobCategory: { $regex: req.query.category, $options: "i" },
+    }),
+    ...(req.query.jobtype && {
+      jobType: { $in: req.query.jobtype },
+    }),
+    ...(req.query.search && {
+      jobTitle: { $regex: req.query.search, $options: "i" },
+    }),
+  };
+
   try {
-    const jobs = await Job.find();
+    const jobs = await Job.find(filters);
     if (!jobs) return res.status(404).json({ message: "No Jobs Data" });
     res.status(200).json(jobs);
   } catch (error) {
@@ -24,10 +36,10 @@ const getJob = async (req, res) => {
 };
 
 const createJob = async (req, res) => {
-  if (!req.isCompany) {
+  if (!req.isCompany && !req.isAdmin) {
     return res
       .status(403)
-      .json({ message: "Only a company can create a job post!" });
+      .json({ message: "Only a company and Admin can create a job post!" });
   }
 
   const newJobPost = new Job({
@@ -89,7 +101,9 @@ const deleteJob = async (req, res) => {
     const job = await Job.findById(id);
 
     if (job.userId !== req.userId)
-      return next(createError(403, "You can delete only your job post!"));
+      return res
+        .status(403)
+        .json({ message: "You can delete only your job post!" });
 
     await Job.findByIdAndDelete(id);
     res.status(200).json({ message: "Your job post has been deleted" });
