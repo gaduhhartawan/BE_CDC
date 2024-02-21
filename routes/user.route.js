@@ -1,4 +1,9 @@
-const { getUsers, getUser, updateUser, deleteUser} = require("../controllers/user.controller");
+const {
+  getUsers,
+  getUser,
+  updateUser,
+  deleteUser,
+} = require("../controllers/user.controller");
 const verifyToken = require("../middlewares/verifyJwt");
 
 const router = require("express").Router();
