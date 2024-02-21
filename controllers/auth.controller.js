@@ -16,7 +16,7 @@ module.exports.Signup = async (req, res, next) => {
       password,
       imgurl,
     });
-    const token = createSecretToken(user._id, user.isCompany);
+    const token = createSecretToken(user._id, user.isCompany, user.isAdmin);
     res.cookie("token", token, {
       withCredentials: true,
       httpOnly: false,
@@ -44,7 +44,7 @@ module.exports.Login = async (req, res, next) => {
     if (!auth) {
       return res.json({ message: "Incorrect password or email" });
     }
-    const token = createSecretToken(user._id, user.isCompany);
+    const token = createSecretToken(user._id, user.isCompany, user.isAdmin);
     res.cookie("token", token, {
       withCredentials: true,
       httpOnly: false,
@@ -52,9 +52,6 @@ module.exports.Login = async (req, res, next) => {
     res.status(201).json({
       message: "User logged in successfully",
       success: true,
-      user_name: user.fullname,
-      is_company: user.isCompany,
-      img_url: user.imgUrl,
     });
     next();
   } catch (error) {
