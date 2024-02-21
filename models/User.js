@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
     imgUrl: {
       type: String,
       required: false,
@@ -32,9 +36,9 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", async function () {
-    this.password = await bcrypt.hash(this.password, 12);
-  });
-  
+  this.password = await bcrypt.hash(this.password, 12);
+});
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
