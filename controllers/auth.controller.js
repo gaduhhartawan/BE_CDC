@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const { createSecretToken } = require("../utils/SecretToken");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 module.exports.Signup = async (req, res, next) => {
   try {
@@ -15,11 +16,6 @@ module.exports.Signup = async (req, res, next) => {
       fullname,
       password,
       imgurl,
-    });
-    const token = createSecretToken(user._id, user.isCompany, user.isAdmin);
-    res.cookie("token", token, {
-      withCredentials: true,
-      httpOnly: false,
     });
     res
       .status(201)
@@ -54,5 +50,28 @@ module.exports.Login = async (req, res, next) => {
     next();
   } catch (error) {
     console.error(error);
+  }
+};
+
+module.exports.Logout = async (req, res) => {
+  const token = req.cookies.token;
+  try {
+    if (!token) {
+      return res.sendStatus(204);
+    }
+    jwt.verify(token, process.env.TOKEN_KEY, async (err, data) => {
+      if (err) {
+        return res.sendStatus(204);
+      } else {
+        res.setHeader("Clear-Site-Data", '"cookies"');
+        res.clearCookie("token");
+        res.status(200).json({ message: "You are logged out!" });
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
+    });
   }
 };
