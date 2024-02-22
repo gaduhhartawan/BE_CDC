@@ -11,6 +11,15 @@ const getJobs = async (req, res) => {
     ...(req.query.search && {
       jobTitle: { $regex: req.query.search, $options: "i" },
     }),
+    ...(req.query.location && {
+      jobLocation: { $regex: req.query.location, $options: "i" },
+    }),
+    ...((req.query.min || req.query.max) && {
+      salaryNum: {
+        ...(req.query.min && { $gt: req.query.min }),
+        ...(req.query.max && { $lt: req.query.max }),
+      },
+    }),
   };
 
   try {
