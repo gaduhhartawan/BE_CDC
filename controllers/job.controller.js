@@ -33,6 +33,23 @@ const getJobs = async (req, res) => {
   }
 };
 
+const getJobsUsers = async (req, res) => {
+  if (!req.isCompany && !req.isAdmin) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  if (req.userId != req.params.id) {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+  try {
+    const jobs = await Job.find({ userId: req.params.id });
+    if (!jobs) return res.status(404).json({ message: "No Jobs Data" });
+    res.status(200).json(jobs);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
 const getJob = async (req, res) => {
   const id = req.params.id;
   try {
@@ -83,7 +100,9 @@ const updateJob = async (req, res) => {
     if (!job) return res.status(404).json({ message: "Job not found" });
 
     if (job.userId !== req.userId)
-      return next(createError(403, "You can update only your job post!"));
+      return res
+        .status(403)
+        .json({ message: "You can update only your job post!" });
 
     job.companyName = companyName;
     job.jobType = jobType;
@@ -140,4 +159,12 @@ const saveData = async (req, res) => {
   }
 };
 
-module.exports = { getJobs, getJob, createJob, updateJob, deleteJob, saveData };
+module.exports = {
+  getJobs,
+  getJob,
+  createJob,
+  updateJob,
+  deleteJob,
+  saveData,
+  getJobsUsers,
+};

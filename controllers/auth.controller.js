@@ -19,6 +19,11 @@ module.exports.Signup = async (req, res, next) => {
       password: hashPassword,
       imgurl,
     });
+    const token = createSecretToken(user._id, user.isCompany, user.isAdmin);
+    res.cookie("token", token, {
+      withCredentials: true,
+      httpOnly: false,
+    });
     res
       .status(201)
       .json({ message: "User signed up successfully", success: true, user });
