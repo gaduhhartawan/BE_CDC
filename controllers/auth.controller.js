@@ -10,11 +10,13 @@ module.exports.Signup = async (req, res, next) => {
     if (existingUser) {
       return res.json({ message: "Email already exists" });
     }
+
+    const hashPassword = await bcrypt.hash(password, 12);
     const user = await User.create({
       ...req.body,
       email,
       fullname,
-      password,
+      password: hashPassword,
       imgurl,
     });
     res
