@@ -34,6 +34,10 @@ const jobSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    workingSite: {
+      type: String,
+      required: false,
+    },
     jobLink: {
       type: String,
       required: true,
