@@ -1,4 +1,5 @@
 const Job = require("../models/Job");
+const getJobsData = require("../utils/scrapJob");
 
 const getJobs = async (req, res) => {
   const filters = {
@@ -127,8 +128,6 @@ const saveData = async (req, res) => {
   try {
     const data = await getJobsData();
     for (const jobData of data) {
-      // console.log(jobData);
-      // res.send(jobData);
       const scrapJobData = new Job(jobData);
       await scrapJobData.save();
     }
