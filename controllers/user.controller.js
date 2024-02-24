@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const bcrypt = require("bcrypt");
 require("dotenv").config();
 
 const getUsers = async (req, res) => {
@@ -11,7 +12,6 @@ const getUsers = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
-
 
 const getUser = async (req, res) => {
   const id = req.params.id;
@@ -27,25 +27,27 @@ const getUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const id = req.params.id;
-  const {
-    email,
-    fullname,
-    password,
-    isCompany,
-    imgUrl,
-  } = req.body;
+  const { email, fullname, password, isCompany, isAdmin, imgUrl, phone } =
+    req.body;
   try {
     const user = await User.findById(id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    if (user.userId !== req.userId)
-      return next(createError(403, "Error User ID!"));
+    if (user._id != req.userId)
+      return res
+        .status(403)
+        .json({ message: "You can update only your own profile!" });
 
-    user.email = email;
+    // user.email = email;
     user.fullname = fullname;
-    user.password = password;
     user.isCompany = isCompany;
+    user.isAdmin = isAdmin;
     user.imgUrl = imgUrl;
+    user.phone = phone;
+
+    if (password && password !== "") {
+      user.password = await bcrypt.hash(password, 12);
+    }
 
     await user.save();
 
@@ -64,7 +66,9 @@ const deleteUser = async (req, res) => {
     const user = await User.findById(id);
 
     if (user.userId !== req.userId)
-      return next(createError(403, "You can delete only your own profile!"));
+      return res
+        .status(403)
+        .json({ message: "You can delete only your own profile!" });
 
     await User.findByIdAndDelete(id);
     res.status(200).json({ message: "Your profile has been deleted" });
@@ -74,4 +78,4 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { getUsers, getUser, updateUser, deleteUser};
+module.exports = { getUsers, getUser, updateUser, deleteUser };
