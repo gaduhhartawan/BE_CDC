@@ -41,7 +41,9 @@ const getJobsUsers = async (req, res) => {
     return res.status(403).json({ message: "Forbidden" });
   }
   try {
-    const jobs = await Job.find({ userId: req.params.id });
+    const jobs = await Job.find({ userId: req.params.id }).sort({
+      createdAt: "desc",
+    });
     if (!jobs) return res.status(404).json({ message: "No Jobs Data" });
     res.status(200).json(jobs);
   } catch (error) {
