@@ -24,7 +24,7 @@ const getJobs = async (req, res) => {
   };
 
   try {
-    const jobs = await Job.find(filters);
+    const jobs = await Job.find(filters).sort({ createdAt: "desc" });
     if (!jobs) return res.status(404).json({ message: "No Jobs Data" });
     res.status(200).json(jobs);
   } catch (error) {
