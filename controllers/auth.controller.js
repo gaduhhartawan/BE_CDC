@@ -74,7 +74,6 @@ module.exports.Logout = async (req, res) => {
       if (err) {
         return res.sendStatus(204);
       } else {
-        res.setHeader("Clear-Site-Data", '"cookies"');
         res.clearCookie("token");
         res.status(200).json({ message: "You are logged out!" });
       }
