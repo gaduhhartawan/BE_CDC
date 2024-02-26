@@ -55,7 +55,7 @@ module.exports.Login = async (req, res, next) => {
       withCredentials: true,
       httpOnly: false,
       sameSite: "none",
-      secure: false,
+      secure: true,
     });
     res.status(200).json(info);
     next();
