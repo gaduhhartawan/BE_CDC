@@ -54,7 +54,7 @@ module.exports.Login = async (req, res, next) => {
     res.cookie("token", token, {
       withCredentials: true,
       httpOnly: false,
-      sameSite: "None",
+      sameSite: "none",
       secure: false,
     });
     res.status(200).json(info);
