@@ -9,7 +9,6 @@ Careerpath merupakan Platform Website yang membantu menemukan dan membangun jalu
   - [Environment Variables](#environtment-variables)
 - [Reference](#reference)
   - [List of Endpoints](#list-of-endpoints)
-- [Disclaimer](#disclaimer)
 
 ## Getting Started
 ### Installation
