@@ -20,9 +20,10 @@ app.use(cookieParser());
 app.use(express.json());
 
 // Cors
-app.use(
-  cors()
-);
+app.use(cors({
+  origin: 'https://careerpath-cdc.vercel.app',
+  credentials: true,
+}));
 
 // Route
 app.use("/api/users", userRoute);
